@@ -24,4 +24,8 @@ vector<Instructor*> loadInstructorsFromFile();
 void saveAssignmentsToFile(std::vector<Assignment*> assignments);
 std::vector<Assignment*> loadAssignmentsFromFile();
 
+
+void loadStudentCourses(vector<User*>& users, const vector<Course*>& allCourses);
+void saveStudentCourses(const vector<User*>& users);
+
 #endif

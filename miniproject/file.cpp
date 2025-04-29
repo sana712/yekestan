@@ -163,3 +163,60 @@ void printUsersFromFile() {
         cout << "Error opening file for printing users." << endl;
     }
 }
+
+void saveStudentCourses(const vector<User*>& users) {
+    ofstream outFile("students_courses.txt");
+    if (!outFile) {
+        cout << "Error opening file to save student courses.\n";
+        return;
+    }
+
+    for (User* user : users) {
+        Student* student = dynamic_cast<Student*>(user);
+        if (student) {
+            outFile << student->getId();
+            for (Course* course : student->getEnrolledCourses()) {
+                outFile << "," << course->getCourseId();
+            }
+            outFile << endl;
+        }
+    }
+
+    outFile.close();
+}
+
+void loadStudentCourses(vector<User*>& users, const vector<Course*>& allCourses) {
+    ifstream inFile("students_courses.txt");
+    if (!inFile) {
+        cout << "No student courses file found.\n";
+        return;
+    }
+
+    string line;
+    while (getline(inFile, line)) {
+        stringstream ss(line);
+        string id;
+        getline(ss, id, ',');
+
+        Student* student = nullptr;
+        for (User* user : users) {
+            student = dynamic_cast<Student*>(user);
+            if (student && student->getId() == id) {
+                break;
+            }
+        }
+
+        if (student) {
+            string courseId;
+            while (getline(ss, courseId, ',')) {
+                for (Course* course : allCourses) {
+                    if (course->getCourseId() == courseId) {
+                        student->  enrollInCourse(course); // اضافه کردن درس به دانشجو
+                    }
+                }
+            }
+        }
+    }
+
+    inFile.close();
+}

@@ -97,62 +97,6 @@ void studentMenu(Student* student, vector<Course*>& allCourses) {
 
 
 
-//void instructorMenu(Instructor* instructor) {
-//    int choice;
-//    do {
-//        cout << "\n=== Instructor Menu ===\n";
-//        cout << "1. Create a Course\n";
-//        cout << "2. Assign Grades\n";
-//        cout << "3. Post Announcement\n";
-//        cout << "4. View My Courses\n";
-//        cout << "5. Logout\n";
-//        cout << "Enter your choice: ";
-//        cin >> choice;
-//
-//        switch (choice) {
-//        case 1: {
-//            string courseId, courseName;
-//            int capacity;
-//
-//            cout << "Enter course ID: ";
-//            cin >> courseId;
-//            cin.ignore();
-//            cout << "Enter course name: ";
-//            getline(cin, courseName);
-//            cout << "Enter course capacity: ";
-//            cin >> capacity;
-//
-//            Course* newCourse = new Course(courseId, courseName, instructor, capacity);
-//            instructor->createCourse(newCourse);
-//            saveCoursesToFile(instructor->getCourses());  // ذخیره‌سازی دوره‌ها بعد از ایجاد
-//            cout << "Course created successfully.\n";
-//            break;
-//        }
-//        case 2: {
-//            instructor->assignGrades();
-//            break;
-//        }
-//        case 3: {
-//            instructor->postAnnouncement();
-//            break;
-//        }
-//        case 4: {
-//            instructor->viewCourses();
-//            break;
-//        }
-//        case 5: {
-//            cout << "Logging out...\n";
-//            break;
-//        }
-//        default:
-//            cout << "Invalid choice. Try again.\n";
-//            break;
-//        }
-//   
-//              // سایر موارد به همون صورت
-//        
-//    } while (choice != 5);
-//}
 
 void instructorMenu(Instructor* instructor) {
     int choice;
@@ -345,6 +289,7 @@ int main() {
     // بعد از لود یوزرها، حالا لود درس‌ها
     vector<Course*> allCourses = loadCoursesFromFile(instructors);
 
+
     // نسبت دادن درس‌ها به استاد مربوطه
     for (Course* course : allCourses) {
         Instructor* prof = course->getProfessor();
@@ -357,7 +302,7 @@ int main() {
         cout << "No users found. Exiting program." << endl;
         return 0;
     }
- 
+    loadStudentCourses(users, allCourses);
 
     string role;
     User* loggedInUser = nullptr;
@@ -390,7 +335,7 @@ int main() {
 
     // بعد از پایان برنامه، کاربران رو دوباره ذخیره می‌کنیم
     saveUsersToFile(users);
-
+    saveStudentCourses(users);
     // پاک کردن حافظه داینامیک
     for (auto user : users) {
         delete user;
