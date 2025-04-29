@@ -24,4 +24,6 @@ public:
     void viewMyCourses();
     void addCourse(Course* course);
     vector<Course*> getCourses() const;
+    void displayGradeForStudent(const string& studentId) const;
+
 };

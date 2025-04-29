@@ -19,5 +19,6 @@ public:
     void viewAssignments(Course* course);
     vector<Course*> getEnrolledCourses() const;
     void enrollInCourse(Course* course);
+    void viewGrades(const vector<Course*>& allCourses) const;
 
 };

@@ -53,3 +53,14 @@ void Student::enrollInCourse(Course* course) {
     enrolledCourses.push_back(course);
     cout << "Successfully enrolled in the course!\n";
 }
+void Student::viewGrades(const vector<Course*>& allCourses) const {
+    for (Course* course : allCourses) {
+        double grade = course->getGradeForStudent(getId());
+        if (grade != -1) {
+            cout << "Course: " << course->getCourseName() << " | Grade: " << grade << endl;
+        }
+        else {
+            cout << "Course: " << course->getCourseName() << " | No grade assigned." << endl;
+        }
+    }
+}

@@ -126,67 +126,71 @@ vector<Instructor*> loadInstructorsFromFile() {
     return instructors;
 }
 
-// تابع بارگذاری دوره‌ها از فایل
 vector<Course*> loadCoursesFromFile(vector<Instructor*> instructors) {
     vector<Course*> courses;
     ifstream inFile("D:\\ap.cpp\\miniproject\\course.txt", ios::in);
     string line;
 
     if (!inFile) {
-        cout << "Error opening course file!" << endl;
+        cout << "Error opening file!" << endl;
         return courses;
     }
 
-    while (getline(inFile, line)) {
-        size_t pipePos = line.find("|");
+    if (inFile.is_open()) {
+        while (getline(inFile, line)) {
+            size_t pos1 = line.find(",");
+            string courseId = line.substr(0, pos1);
+            size_t pos2 = line.find(",", pos1 + 1);
+            string courseName = line.substr(pos1 + 1, pos2 - pos1 - 1);
+            size_t pos3 = line.find(",", pos2 + 1);
+            string professorId = line.substr(pos2 + 1, pos3 - pos2 - 1);
+            int capacity = stoi(line.substr(pos3 + 1));
 
-        // قسمت اول: اطلاعات درس
-        string courseInfo = line.substr(0, pipePos);
-        size_t pos1 = courseInfo.find(",");
-        string courseId = courseInfo.substr(0, pos1);
-        size_t pos2 = courseInfo.find(",", pos1 + 1);
-        string courseName = courseInfo.substr(pos1 + 1, pos2 - pos1 - 1);
-        size_t pos3 = courseInfo.find(",", pos2 + 1);
-        string professorId = courseInfo.substr(pos2 + 1, pos3 - pos2 - 1);
-        int capacity = stoi(courseInfo.substr(pos3 + 1));
+            // پیدا کردن استاد با آی‌دی
+            Instructor* instructor = nullptr;
+            for (auto inst : instructors) {
+                if (inst->getId() == professorId) {
+                    instructor = inst;
+                    break;
+                }
+            }
 
-        // پیدا کردن استاد
-        Instructor* instructor = nullptr;
-        for (auto inst : instructors) {
-            if (inst->getId() == professorId) {
-                instructor = inst;
-                break;
+            if (instructor != nullptr) {
+                Course* newCourse = new Course(courseId, courseName, instructor, capacity);
+
+                // خواندن نمرات دانشجویان
+                size_t pos4 = line.find("|", pos3 + 1);
+                if (pos4 != string::npos) {
+                    string gradesStr = line.substr(pos4 + 1);
+                    vector<string> studentGradePairs;
+                    size_t start = 0, end;
+                    while ((end = gradesStr.find(",", start)) != string::npos) {
+                        studentGradePairs.push_back(gradesStr.substr(start, end - start));
+                        start = end + 1;
+                    }
+                    studentGradePairs.push_back(gradesStr.substr(start)); // آخرین پاراگراف
+
+                    for (const auto& pair : studentGradePairs) {
+                        size_t separator = pair.find(":");
+                        string studentId = pair.substr(0, separator);
+                        double grade = stod(pair.substr(separator + 1));
+
+                        // اضافه کردن دانشجو و نمره
+                        newCourse->setGradeForStudent(studentId, grade);
+                    }
+                }
+
+                courses.push_back(newCourse);
             }
         }
-
-        if (instructor == nullptr) continue; // اگر استاد پیدا نشد بیخیال این درس شو
-
-        Course* course = new Course(courseId, courseName, instructor, capacity);
-
-        // قسمت دوم: اطلاعات دانشجوها و نمره‌ها
-        if (pipePos != string::npos && pipePos + 1 < line.length()) {
-            string studentsInfo = line.substr(pipePos + 1);
-            stringstream ss(studentsInfo);
-            string token;
-            while (getline(ss, token, ',')) {
-                size_t colonPos = token.find(":");
-                string studentId = token.substr(0, colonPos);
-                double grade = stod(token.substr(colonPos + 1));
-
-                // ایجاد شیء موقت برای دانشجو (بسته به پیاده‌سازیت میشه اینجا بهترش هم کرد)
-                Student* student = new Student(studentId, "", "");  // فقط آی‌دی لازمه
-                course->enrollStudent(studentId);  // اضافه کردن دانشجو
-                course->addGrade(grade);          // اضافه کردن نمره
-            }
-        }
-
-        courses.push_back(course);
+        inFile.close();
+    }
+    else {
+        cout << "Error opening file for loading courses." << endl;
     }
 
-    inFile.close();
     return courses;
 }
-
 
 void printUsersFromFile() {
     ifstream inFile("D:\\ap.cpp\\miniproject\\users.txt", ios::in);

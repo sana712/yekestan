@@ -10,15 +10,17 @@
 
 using namespace std;
 
-void viewGrades(Student* student) {
-    vector<Course*> courses = student->getEnrolledCourses();
-    for (int i = 0; i < courses.size(); ++i) {
-        double grade = courses[i]->getGradeForStudent(student->getId());
-        cout << "Course: " << courses[i]->getCourseName() << " | ";
-        if (grade != -1)
-            cout << "Grade: " << grade << endl;
-        else
-            cout << "No grade assigned yet." << endl;
+
+void displayGradeForStudent(const Student& student) {
+    vector<Course*> courses = student.getEnrolledCourses();  // گرفتن دوره‌های ثبت‌نام شده
+    for (Course* course : courses) {
+        double grade = course->getGradeForStudent(student.getId());  // گرفتن نمره برای هر دوره
+        if (grade == -1) {
+            cout << "No grade assigned for student " << student.getId() << " in course " << course->getCourseName() << endl;
+        }
+        else {
+            cout << "Grade for student " << student.getId() << " in course " << course->getCourseName() << ": " << grade << endl;
+        }
     }
 }
 
@@ -95,7 +97,7 @@ void studentMenu(Student* student, vector<Course*>& allCourses) {
             break;
         }
         case 6:
-            viewGrades(student);
+            student->viewGrades(allCourses);
             break;
 
         case 7:

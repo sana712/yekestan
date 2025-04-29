@@ -16,24 +16,19 @@ void Instructor::createCourse(Course* newCourse) {
 }
 
 
+// نمونه ذخیره‌سازی نمره در فایل
 void Instructor::assignGrades(string courseId, string studentId, int grade) {
-    bool found = false;
-
+    // جستجو برای دوره و دانشجو
     for (Course* course : courses) {
         if (course->getCourseId() == courseId) {
-            found = true;
-            // اضافه کردن نمره به درس
-            course->addGrade(grade);
-            saveCoursesToFile(courses);  // ذخیره به فایل بعد از تغییر
+            course->setGradeForStudent(studentId, grade);
+            saveCoursesToFile(courses);  // ذخیره تغییرات به فایل
             cout << "Assigned grade " << grade << " to student " << studentId << " in course " << course->getCourseName() << endl;
             break;
         }
     }
-
-    if (!found) {
-        cout << "Course not found!\n";
-    }
 }
+
 
 
 void Instructor::postAnnouncement(string announcement) {
@@ -61,3 +56,14 @@ vector<Course*> Instructor::getCourses() const {
     return courses;
 }
 
+void Instructor::displayGradeForStudent(const string& studentId) const {
+    for (const auto& course : courses) {
+        double grade = course->getGradeForStudent(studentId);
+        if (grade != -1) {
+            cout << "Grade for student " << studentId << " in course " << course->getCourseName() << ": " << grade << endl;
+        }
+        else {
+            cout << "No grade assigned for student " << studentId << " in course " << course->getCourseName() << endl;
+        }
+    }
+}
