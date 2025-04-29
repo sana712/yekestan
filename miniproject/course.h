@@ -21,6 +21,7 @@
         Instructor* professor;
         int capacity;
         std::vector<double> grades;
+        vector<string> assignments;
 
     public:
         Course(std::string id, std::string name, Instructor* prof, int cap)
@@ -51,6 +52,22 @@
         void addGrade(double grade) {
             grades.push_back(grade);  // نمره رو به لیست نمرات اضافه می‌کنه
         }
+
+        void addAssignment(const string& assignment) {
+            assignments.push_back(assignment);
+        }
+        void viewAssignments() const {
+            if (assignments.empty()) {
+                cout << "No assignments for this course.\n";
+            }
+            else {
+                cout << "Assignments:\n";
+                for (const auto& a : assignments) {
+                    cout << "- " << a << endl;
+                }
+            }
+        }
+
 
 
     };
