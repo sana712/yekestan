@@ -5,11 +5,14 @@
 #include "student.h"
 #include "instructor.h"
 #include "admin.h"
-
+#include <windows.h>  
 #include "file.h"
 
 using namespace std;
-
+#define RESET   "\033[0m"
+#define RED     "\033[31m"
+#define BLUE    "\033[34m"
+#define GREEN   "\033[32m"
 
 void displayGradeForStudent(const Student& student) {
     vector<Course*> courses = student.getEnrolledCourses();  // گرفتن دوره‌های ثبت‌نام شده
@@ -279,6 +282,40 @@ bool login(const vector<User*>& users, string& role, User** loggedInUser) {
     return false;
 }
 
+void firstwellcome() {
+
+    printf("\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t");
+    char wellcome[30] = " WELLCOME TO  YEKESTAN";
+  
+    for (int i = 0; i < 30; i++) {
+        printf("%c", wellcome[i]);
+        Sleep(85);
+    }
+    printf(RESET);
+   
+    printf("\n\n\t\t\t\t\t\t\t\t");
+    char creator[35] = "DEVELOPED BY Sana";
+    for (int i = 0; i < 19; i++) {
+        printf("\033[1;34m%c\033[0m", creator[i]);
+        Sleep(200);
+    }
+    Sleep(4000);
+    system("cls||clear");
+}
+
+void printwelcome() {
+
+    printf(RED);
+    printf("                           oooo  oooo                                                  \n");
+    printf("                           `888  `888                                                  \n");
+    printf("oooo oooo    ooo  .ooooo.   888   888   .ooooo.    .ooooo.  ooo. .oo.  .oo.    .ooooo.  \n");
+    printf(" `88. `88.  .8'  d88' `88b  888   888  d88' ` `Y  d88' `88b `888P`Y88bP`Y88b  d88' `88b \n");
+    printf("  `88..]88..8'   888ooo888  888   888  888        888   888  888   888   888  888ooo888 \n");
+    printf("   `888'`888'    888     .  888   888  888   .o8  888   888  888   888   888  888     . \n");
+    printf("    `8'  `8'     `Y8bod8P' o888o o888o `Y8bod8P'  `Y8bod8P' o888o o888o o888o `Y8bod8P' \n");
+    printf("                                                                                       \n");
+    printf(RESET);
+}
 
  // حتما اینو داشته باش که توش save/load تعریف شده
 #include "user.h" 
@@ -289,7 +326,8 @@ bool login(const vector<User*>& users, string& role, User** loggedInUser) {
 using namespace std;
 
 int main() {
-  
+    firstwellcome();
+    printwelcome();
     // اول کاربران را از فایل بارگذاری می‌کنیم
     vector<User*> users = loadUsersFromFile();
    /* cout << "Users loaded: " << users.size() << endl;
