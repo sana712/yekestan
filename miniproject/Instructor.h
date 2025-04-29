@@ -22,4 +22,6 @@ public:
     void assignGrades(string courseId, string studentId, int grade);
     void postAnnouncement(string announcement);
     void viewMyCourses();
+    void addCourse(Course* course);
+    vector<Course*> getCourses() const;
 };

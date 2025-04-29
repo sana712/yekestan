@@ -1,21 +1,59 @@
 ﻿#include "admin.h"
-
+#include "file.h"
 
 Admin :: Admin(string id, string username, string password)
     : User(id, username, password, "Admin") {
 }
 
 void Admin::createUser(User* newUser) {
+    // بارگذاری کاربران از فایل
+    vector<User*> users = loadUsersFromFile();
+
+    // افزودن کاربر جدید به وکتور
     users.push_back(newUser);
+
+    // ذخیره‌سازی کاربران به فایل
+    saveUsersToFile(users);
+
     cout << "User " << newUser->getRole() << " created successfully." << endl;
 }
 
 void Admin::deleteUser(string userId) {
-    // Soft delete (حذف نرم)
-    cout << "User with ID " << userId << " deleted (soft delete)." << endl;
-}
+  
+        vector<User*> users = loadUsersFromFile(); // بارگذاری کاربران
+
+        auto it = find_if(users.begin(), users.end(), [&userId](User* user) {
+            return user->getId() == userId;
+            });
+
+        if (it != users.end()) {
+            delete* it;  // حذف کاربر از حافظه
+            users.erase(it);  // حذف از وکتور
+            cout << "User deleted.\n";
+        }
+
+        // ذخیره مجدد کاربران به فایل
+        saveUsersToFile(users);
+    }
+
+
 
 void Admin::restoreUser(string userId) {
+    // بارگذاری کاربران از فایل
+    vector<User*> users = loadUsersFromFile();
+
+    // جستجو و بازیابی کاربر حذف شده
+    for (auto& user : users) {
+        if (user->getId() == userId) {
+            // اگر کاربر پیدا شد، بازیابی کنیم (مثلاً تغییر وضعیت به فعال)
+            user->setRole("Active");  // فرض کن که نقش رو به Active تغییر می‌ده
+            break;
+        }
+    }
+
+    // ذخیره‌سازی تغییرات به فایل
+    saveUsersToFile(users);
+
     cout << "User with ID " << userId << " restored." << endl;
 }
 

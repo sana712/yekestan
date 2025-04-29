@@ -6,6 +6,8 @@
 #include "instructor.h"
 #include "admin.h"
 
+#include "file.h"
+
 using namespace std;
 
 
@@ -35,7 +37,6 @@ void studentMenu(Student* student) {
                 cout << "Invalid rating. Must be between 1 and 5.\n";
             }
             else {
-                // فرض: student کلاس Course را ذخیره کرده و می‌تواند ایندکس بدهیم
                 vector<Course*> courses = student->getEnrolledCourses();
                 if (courseIndex >= 0 && courseIndex < courses.size()) {
                     student->rateCourse(courses[courseIndex], rating);
@@ -65,10 +66,70 @@ void studentMenu(Student* student) {
         default:
             cout << "Invalid choice. Try again.\n";
         }
+
+        // ذخیره‌سازی دوره‌ها بعد از هر تغییر
+        saveCoursesToFile(student->getEnrolledCourses());  // ذخیره‌سازی دوره‌های جدید
     } while (choice != 4);
 }
 
-// منوی استاد
+
+//void instructorMenu(Instructor* instructor) {
+//    int choice;
+//    do {
+//        cout << "\n=== Instructor Menu ===\n";
+//        cout << "1. Create a Course\n";
+//        cout << "2. Assign Grades\n";
+//        cout << "3. Post Announcement\n";
+//        cout << "4. View My Courses\n";
+//        cout << "5. Logout\n";
+//        cout << "Enter your choice: ";
+//        cin >> choice;
+//
+//        switch (choice) {
+//        case 1: {
+//            string courseId, courseName;
+//            int capacity;
+//
+//            cout << "Enter course ID: ";
+//            cin >> courseId;
+//            cin.ignore();
+//            cout << "Enter course name: ";
+//            getline(cin, courseName);
+//            cout << "Enter course capacity: ";
+//            cin >> capacity;
+//
+//            Course* newCourse = new Course(courseId, courseName, instructor, capacity);
+//            instructor->createCourse(newCourse);
+//            saveCoursesToFile(instructor->getCourses());  // ذخیره‌سازی دوره‌ها بعد از ایجاد
+//            cout << "Course created successfully.\n";
+//            break;
+//        }
+//        case 2: {
+//            instructor->assignGrades();
+//            break;
+//        }
+//        case 3: {
+//            instructor->postAnnouncement();
+//            break;
+//        }
+//        case 4: {
+//            instructor->viewCourses();
+//            break;
+//        }
+//        case 5: {
+//            cout << "Logging out...\n";
+//            break;
+//        }
+//        default:
+//            cout << "Invalid choice. Try again.\n";
+//            break;
+//        }
+//   
+//              // سایر موارد به همون صورت
+//        
+//    } while (choice != 5);
+//}
+
 void instructorMenu(Instructor* instructor) {
     int choice;
     do {
@@ -83,7 +144,6 @@ void instructorMenu(Instructor* instructor) {
 
         switch (choice) {
         case 1: {
-            // ساخت درس جدید
             string courseId, courseName;
             int capacity;
 
@@ -97,14 +157,14 @@ void instructorMenu(Instructor* instructor) {
 
             Course* newCourse = new Course(courseId, courseName, instructor, capacity);
             instructor->createCourse(newCourse);
-
+            saveCoursesToFile(instructor->getCourses());  // ذخیره دوره‌ها به فایل بعد از ایجاد
             cout << "Course created successfully.\n";
             break;
         }
         case 2: {
-            // دادن نمره به دانشجو
             string courseId, studentId;
             int grade;
+
             cout << "Enter course ID: ";
             cin >> courseId;
             cout << "Enter student ID: ";
@@ -112,33 +172,29 @@ void instructorMenu(Instructor* instructor) {
             cout << "Enter grade: ";
             cin >> grade;
 
-            instructor->assignGrades(courseId, studentId, grade);  // توجه کن که متد Instructor باید تغییر کنه!
-
-            cout << "Grade assigned successfully.\n";
+            instructor->assignGrades(courseId, studentId, grade);
             break;
         }
         case 3: {
-            // گذاشتن اطلاعیه
             string announcement;
             cout << "Enter announcement: ";
             cin.ignore();
             getline(cin, announcement);
 
             instructor->postAnnouncement(announcement);
-
-            cout << "Announcement posted.\n";
             break;
         }
         case 4: {
             instructor->viewMyCourses();
             break;
         }
-        case 5:
+        case 5: {
             cout << "Logging out...\n";
             break;
-
+        }
         default:
-            cout << "Invalid choice. Try again.\n";
+            cout << "Invalid choice, please try again.\n";
+            break;
         }
     } while (choice != 5);
 }
@@ -238,8 +294,7 @@ bool login(const vector<User*>& users, string& role, User** loggedInUser) {
 }
 
 
-
-#include "file.h" // حتما اینو داشته باش که توش save/load تعریف شده
+ // حتما اینو داشته باش که توش save/load تعریف شده
 #include "user.h" 
 #include "course.h"
 #include "assignment.h"
@@ -248,13 +303,37 @@ bool login(const vector<User*>& users, string& role, User** loggedInUser) {
 using namespace std;
 
 int main() {
+  
     // اول کاربران را از فایل بارگذاری می‌کنیم
     vector<User*> users = loadUsersFromFile();
+   /* cout << "Users loaded: " << users.size() << endl;
+    for (User* user : users) {
+        cout << user->getUsername() << " (" << user->getRole() << ")" << endl;
+    }*/
+
+    vector<Instructor*> instructors;
+    for (User* user : users) {
+        if (user->getRole() == "Instructor") {
+            instructors.push_back(dynamic_cast<Instructor*>(user));
+        }
+    }
+
+    // بعد از لود یوزرها، حالا لود درس‌ها
+    vector<Course*> allCourses = loadCoursesFromFile(instructors);
+
+    // نسبت دادن درس‌ها به استاد مربوطه
+    for (Course* course : allCourses) {
+        Instructor* prof = course->getProfessor();
+        if (prof != nullptr) {
+            prof->addCourse(course);
+        }
+    }
 
     if (users.empty()) {
         cout << "No users found. Exiting program." << endl;
         return 0;
     }
+ 
 
     string role;
     User* loggedInUser = nullptr;

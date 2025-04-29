@@ -23,42 +23,41 @@ void saveUsersToFile(vector<User*> users) {
 vector<User*> loadUsersFromFile() {
     vector<User*> users;
     ifstream inFile("D:\\ap.cpp\\miniproject\\users.txt", ios::in);
+    string line;
 
     if (!inFile) {
         cout << "Error opening file!" << endl;
-        return users;  // اگر نتونست فایل رو باز کنه، یک آرایه خالی برمی‌گردونه
+        return users;
     }
 
-    string line;
-    if (inFile.is_open()) {
-        while (getline(inFile, line)) {
-            size_t pos1 = line.find(",");
-            string role = line.substr(0, pos1);
-            size_t pos2 = line.find(",", pos1 + 1);
-            string id = line.substr(pos1 + 1, pos2 - pos1 - 1);
-            size_t pos3 = line.find(",", pos2 + 1);
-            string username = line.substr(pos2 + 1, pos3 - pos2 - 1);
-            string password = line.substr(pos3 + 1);
+    while (getline(inFile, line)) {
+        size_t pos1 = line.find(",");
+        string role = line.substr(0, pos1);
+        size_t pos2 = line.find(",", pos1 + 1);
+        string id = line.substr(pos1 + 1, pos2 - pos1 - 1);
+        size_t pos3 = line.find(",", pos2 + 1);
+        string username = line.substr(pos2 + 1, pos3 - pos2 - 1);
+        string password = line.substr(pos3 + 1);
 
-            // بر اساس نقش، یک شیء جدید از کاربر ساخته میشه
-            if (role == "Admin") {
-                users.push_back(new Admin(id, username, password));
-            }
-            else if (role == "Instructor") {
-                users.push_back(new Instructor(id, username, password));
-            }
-            else if (role == "Student") {
-                users.push_back(new Student(id, username, password));
-            }
+        if (role == "Student") {
+            users.push_back(new Student(id, username, password));
         }
-        inFile.close();
-    }
-    else {
-        cout << "Error opening file for loading users." << endl;
+        else if (role == "Instructor") {
+            users.push_back(new Instructor(id, username, password));
+        }
+        else if (role == "Admin") {
+            users.push_back(new Admin(id, username, password));
+        }
+        else {
+            // نقش ناشناخته، ردش کن
+            cout << "Unknown role found in file: " << role << endl;
+        }
     }
 
+    inFile.close();
     return users;
 }
+
 // تابع ذخیره دروس به فایل
 void saveCoursesToFile(vector<Course*> courses) {
     ofstream outFile("D:\\ap.cpp\\miniproject\\course.txt", ios::out);
@@ -149,4 +148,18 @@ vector<Course*> loadCoursesFromFile(vector<Instructor*> instructors) {
     }
 
     return courses;
+}
+
+void printUsersFromFile() {
+    ifstream inFile("D:\\ap.cpp\\miniproject\\users.txt", ios::in);
+    string line;
+    if (inFile.is_open()) {
+        while (getline(inFile, line)) {
+            cout << line << endl;
+        }
+        inFile.close();
+    }
+    else {
+        cout << "Error opening file for printing users." << endl;
+    }
 }

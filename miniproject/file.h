@@ -19,6 +19,7 @@ vector<User*> loadUsersFromFile();
 void saveCoursesToFile(std::vector<Course*> courses);
 std::vector<Course*> loadCoursesFromFile(std::vector<Instructor*> instructors);
 
+vector<Instructor*> loadInstructorsFromFile();
 // ذخیره‌سازی و بارگذاری تکالیف
 void saveAssignmentsToFile(std::vector<Assignment*> assignments);
 std::vector<Assignment*> loadAssignmentsFromFile();

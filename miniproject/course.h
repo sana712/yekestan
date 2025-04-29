@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <iostream>
 #include <string>
 #include <vector>
@@ -27,7 +27,7 @@
             : courseId(id), courseName(name), professor(prof), capacity(cap) {
         }
 
-        // Getters � setters
+        // Getters و setters
         std::string getCourseId() const { return courseId; }
         void setCourseId(const std::string& id) { courseId = id; }
 
@@ -48,6 +48,10 @@
             }
             return sum / grades.size();
         }
+        void addGrade(double grade) {
+            grades.push_back(grade);  // نمره رو به لیست نمرات اضافه می‌کنه
+        }
+
 
     };
 
