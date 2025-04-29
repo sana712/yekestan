@@ -1,5 +1,6 @@
 ﻿#include "Instructor.h"
-#include "course.h" 
+#include"course.h"
+
 
 Instructor::Instructor(string id, string username, string password)
     : User(id, username, password, "Instructor") {

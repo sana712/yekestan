@@ -1,11 +1,6 @@
 ﻿#pragma once
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include "admin.h"
-#include "instructor.h"
-#include "student.h"
+
+
 #include "user.h"
 
 using namespace std;

@@ -1,4 +1,6 @@
-﻿#include "student.h"
+﻿#pragma once
+
+#include "student.h"
 #include "course.h"
 
 Student::Student(string id, string username, string password)

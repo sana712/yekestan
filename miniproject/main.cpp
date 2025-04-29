@@ -1,4 +1,6 @@
-﻿#include <iostream>
+﻿#pragma once
+
+#include <iostream>
 #include <vector>
 #include "student.h"
 #include "instructor.h"

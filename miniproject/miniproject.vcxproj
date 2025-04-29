@@ -136,6 +136,7 @@
     <ClInclude Include="user.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="admin.cpp" />
     <ClCompile Include="file.cpp" />
     <ClCompile Include="Instructor.cpp" />
     <ClCompile Include="main.cpp" />

@@ -3,9 +3,6 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "admin.h"
-#include "instructor.h"
-#include "student.h"
 
 using namespace std;
 
