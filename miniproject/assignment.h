@@ -46,7 +46,7 @@ public:
         return dueDate;
     }
 
-    // Setter functions
+   
     void setAssignmentId(const string& newId) {
         assignmentId = newId;
     }
