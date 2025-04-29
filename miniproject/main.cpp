@@ -188,9 +188,8 @@ void instructorMenu(Instructor* instructor) {
     } while (choice != 5);
 }
 
-
-void adminMenu(Admin* admin) {
-    int choice;
+void adminMenu(Admin* admin, vector<User*>& users){
+int choice;
     do {
         cout << "\n=== Admin Menu ===\n";
         cout << "1. Create User\n";
@@ -228,7 +227,8 @@ void adminMenu(Admin* admin) {
                 break;
             }
 
-            admin->createUser(newUser);
+            admin->createUser(users, newUser);
+
             break;
         }
         case 2: {
@@ -381,7 +381,7 @@ int main() {
         else if (role == "Admin") {
             Admin* admin = dynamic_cast<Admin*>(loggedInUser);
             if (admin) {
-                adminMenu(admin);
+                adminMenu(admin , users);
             }
         }
     }

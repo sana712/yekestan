@@ -23,4 +23,5 @@ public:
     void viewCourseList();
 
     void viewStatistics();
+    void createUser(vector<User*>& users, User* newUser);
 };

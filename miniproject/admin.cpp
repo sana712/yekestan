@@ -5,18 +5,6 @@ Admin :: Admin(string id, string username, string password)
     : User(id, username, password, "Admin") {
 }
 
-void Admin::createUser(User* newUser) {
-    // بارگذاری کاربران از فایل
-    vector<User*> users = loadUsersFromFile();
-
-    // افزودن کاربر جدید به وکتور
-    users.push_back(newUser);
-
-    // ذخیره‌سازی کاربران به فایل
-    saveUsersToFile(users);
-
-    cout << "User " << newUser->getRole() << " created successfully." << endl;
-}
 
 void Admin::deleteUser(string userId) {
   
@@ -68,4 +56,10 @@ void Admin::viewStatistics() {
     for (auto course : courses) {
         cout << "Course: " << course->getCourseName() << ", Avg Grade: " << course->getAverageGrade() << endl;
     }
+}
+
+void Admin::createUser(vector<User*>& users, User* newUser) {
+    users.push_back(newUser);  // مستقیم به وکتور اصلی اضافه کن
+    saveUsersToFile(users);    // بعد ذخیره کن
+    cout << "User " << newUser->getRole() << " created successfully." << endl;
 }
