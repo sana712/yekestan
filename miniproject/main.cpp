@@ -236,7 +236,7 @@ int choice;
             string userId;
             cout << "Enter User ID to delete: ";
             cin >> userId;
-            admin->deleteUser(userId);
+            admin->deleteUser(users, userId);
             break;
         }
         case 3: {

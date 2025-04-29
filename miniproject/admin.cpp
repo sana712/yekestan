@@ -6,23 +6,21 @@ Admin :: Admin(string id, string username, string password)
 }
 
 
-void Admin::deleteUser(string userId) {
-  
-        vector<User*> users = loadUsersFromFile(); // بارگذاری کاربران
+void Admin::deleteUser(vector<User*>& users, const string& userId) {
+    auto it = std::find_if(users.begin(), users.end(), [&](User* user) {
+        return user->getId() == userId;
+        });
 
-        auto it = find_if(users.begin(), users.end(), [&userId](User* user) {
-            return user->getId() == userId;
-            });
-
-        if (it != users.end()) {
-            delete* it;  // حذف کاربر از حافظه
-            users.erase(it);  // حذف از وکتور
-            cout << "User deleted.\n";
-        }
-
-        // ذخیره مجدد کاربران به فایل
-        saveUsersToFile(users);
+    if (it != users.end()) {
+        delete* it;  // آزاد کردن حافظه
+        users.erase(it);  // حذف از وکتور
+        saveUsersToFile(users);  // ذخیره به فایل
+        cout << "User deleted successfully.\n";
     }
+    else {
+        cout << "User not found.\n";
+    }
+}
 
 
 

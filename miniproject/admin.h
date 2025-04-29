@@ -16,7 +16,7 @@ public:
     Admin(string id, string username, string password);
     void createUser(User* newUser);
 
-    void deleteUser(string userId);
+    void deleteUser(vector<User*>& users, const string& userId);
 
     void restoreUser(string userId);
 

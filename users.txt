@@ -1,4 +1,3 @@
 Instructor,1001,teacher1,password1
 Student,2001,student1,password2
 Admin,3001,admin,password3
-Student,2002,stu,1234
