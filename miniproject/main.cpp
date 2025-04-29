@@ -11,23 +11,45 @@
 using namespace std;
 
 
-
-void studentMenu(Student* student) {
+void studentMenu(Student* student, vector<Course*>& allCourses) {
     int choice;
     do {
         cout << "\n=== Student Menu ===\n";
-        cout << "1. View Enrolled Courses\n";
-        cout << "2. Rate a Course\n";
-        cout << "3. View Assignments\n";
-        cout << "4. Logout\n";
+        cout << "1. View All Available Courses\n";
+        cout << "2. Enroll in a Course\n";
+        cout << "3. View My Enrolled Courses\n";
+        cout << "4. Rate a Course\n";
+        cout << "5. View Assignments\n";
+        cout << "6. Logout\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
         switch (choice) {
-        case 1:
+        case 1: {
+            cout << "\n--- All Available Courses ---\n";
+            for (int i = 0; i < allCourses.size(); ++i) {
+                cout << i << ". " << allCourses[i]->getCourseName() << endl;
+            }
+            break;
+        }
+        case 2: {
+            int courseIndex;
+            cout << "Enter course index to enroll (starting from 0): ";
+            cin >> courseIndex;
+            if (courseIndex >= 0 && courseIndex < allCourses.size()) {
+                student->enrollInCourse(allCourses[courseIndex]);
+                cout << "Enrolled successfully!\n";
+            }
+            else {
+                cout << "Invalid course index.\n";
+            }
+            break;
+        }
+        case 3: {
             student->viewCourses();
             break;
-        case 2: {
+        }
+        case 4: {
             int courseIndex, rating;
             cout << "Enter course index to rate (starting from 0): ";
             cin >> courseIndex;
@@ -47,7 +69,7 @@ void studentMenu(Student* student) {
             }
             break;
         }
-        case 3: {
+        case 5: {
             int courseIndex;
             cout << "Enter course index to view assignments (starting from 0): ";
             cin >> courseIndex;
@@ -60,17 +82,19 @@ void studentMenu(Student* student) {
             }
             break;
         }
-        case 4:
+        case 6:
             cout << "Logging out...\n";
             break;
         default:
             cout << "Invalid choice. Try again.\n";
         }
 
-        // ذخیره‌سازی دوره‌ها بعد از هر تغییر
-        saveCoursesToFile(student->getEnrolledCourses());  // ذخیره‌سازی دوره‌های جدید
-    } while (choice != 4);
+        // بعد از تغییرات ثبت نام یا نمره‌دهی میتونی فایل رو ذخیره کنی
+        saveCoursesToFile(allCourses);
+
+    } while (choice != 6);
 }
+
 
 
 //void instructorMenu(Instructor* instructor) {
@@ -344,7 +368,7 @@ int main() {
         if (role == "Student") {
             Student* student = dynamic_cast<Student*>(loggedInUser);
             if (student) {
-                studentMenu(student);
+                studentMenu(student, allCourses);
             }
         }
         else if (role == "Instructor") {

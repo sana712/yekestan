@@ -18,5 +18,6 @@ public:
     void rateCourse(Course* course, int rating);
     void viewAssignments(Course* course);
     vector<Course*> getEnrolledCourses() const;
+    void enrollInCourse(Course* course);
 
 };

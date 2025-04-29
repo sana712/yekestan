@@ -40,3 +40,16 @@ void Student::viewAssignments(Course* course) {
 vector<Course*> Student::getEnrolledCourses() const {
     return enrolledCourses;
 }
+void Student::enrollInCourse(Course* course) {
+    // چک کنیم که قبلا ثبت نام نکرده باشه
+    for (Course* enrolled : enrolledCourses) {
+        if (enrolled->getCourseId() == course->getCourseId()) {
+            cout << "You are already enrolled in this course.\n";
+            return;
+        }
+    }
+
+    // اگر ثبت نام نکرده بود
+    enrolledCourses.push_back(course);
+    cout << "Successfully enrolled in the course!\n";
+}
