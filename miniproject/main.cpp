@@ -10,6 +10,17 @@
 
 using namespace std;
 
+void viewGrades(Student* student) {
+    vector<Course*> courses = student->getEnrolledCourses();
+    for (int i = 0; i < courses.size(); ++i) {
+        double grade = courses[i]->getGradeForStudent(student->getId());
+        cout << "Course: " << courses[i]->getCourseName() << " | ";
+        if (grade != -1)
+            cout << "Grade: " << grade << endl;
+        else
+            cout << "No grade assigned yet." << endl;
+    }
+}
 
 void studentMenu(Student* student, vector<Course*>& allCourses) {
     int choice;
@@ -20,7 +31,8 @@ void studentMenu(Student* student, vector<Course*>& allCourses) {
         cout << "3. View My Enrolled Courses\n";
         cout << "4. Rate a Course\n";
         cout << "5. View Assignments\n";
-        cout << "6. Logout\n";
+        cout << "6.View Grades\n";
+        cout << "7. Logout\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -83,6 +95,10 @@ void studentMenu(Student* student, vector<Course*>& allCourses) {
             break;
         }
         case 6:
+            viewGrades(student);
+            break;
+
+        case 7:
             cout << "Logging out...\n";
             break;
         default:

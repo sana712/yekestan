@@ -20,7 +20,8 @@
         std::string courseName;
         Instructor* professor;
         int capacity;
-        std::vector<double> grades;
+        vector<string> studentIds;    // لیست آیدی دانشجوها
+        vector<double> grades;
         vector<string> assignments;
 
     public:
@@ -68,8 +69,45 @@
             }
         }
 
+        void setGradeForStudent(const string& studentId, double grade) {
+            for (int i = 0; i < studentIds.size(); i++) {
+                if (studentIds[i] == studentId) {
+                    grades[i] = grade; // اگر قبلاً داشت، نمره رو آپدیت کن
+                    return;
+                }
+            }
+            // اگر دانشجو پیدا نشد، اضافه کن
+            studentIds.push_back(studentId);
+            grades.push_back(grade);
+        }
+
+        void enrollStudent(const string& studentId) {
+            if (studentIds.size() >= capacity) {
+                cout << "Course is full. Cannot enroll more students.\n";
+                return;
+            }
+            studentIds.push_back(studentId);
+            grades.push_back(-1); // دانشجو ثبت نام شد، نمره اولیه -1
+        }
+
+        // گرفتن نمره‌ی دانشجو
+        double getGradeForStudent(const string& studentId) const {
+            for (int i = 0; i < studentIds.size(); i++) {
+                if (studentIds[i] == studentId) {
+                    return grades[i];
+                }
+            }
+            return -1; // یعنی نمره‌ای وجود نداره
+        }
 
 
+        vector<string> getStudentIds() const {
+            return studentIds;
+        }
+
+        vector<double> getGrades() const {
+            return grades;
+        }
     };
 
 #endif
